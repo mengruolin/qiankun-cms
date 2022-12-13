@@ -5,8 +5,8 @@
     <div class="main-layout__content">
       <layout-sider />
       <div class="main-layout__main">
-        <div id="target">子应用</div>
-        <a-layout-footer>Footer</a-layout-footer>
+        <div id="micro-target"></div>
+        <a-layout-footer>footer</a-layout-footer>
       </div>
     </div>
   </div>
@@ -43,8 +43,8 @@ import LayoutSider from './private/layout-sider.vue';
     overflow: auto;
   }
 
-  #target {
-    height: 1213px;
-  }
+  // #micro-target {
+  //   height: 100%;
+  // }
 }
 </style>

@@ -6,6 +6,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: Layout,
+    children: [
+      {
+        path: 'microApp/:pathMatch(.*)*',
+        component: () => import('@/layout/child-view.vue'),
+      },
+    ],
   },
 ];
 

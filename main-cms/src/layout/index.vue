@@ -1,5 +1,5 @@
 <template>
-  <div class="main-layout">
+  <div v-show="isMicroApp" class="main-layout">
     <layout-header class="main-layout__header" />
 
     <div class="main-layout__content">
@@ -10,11 +10,24 @@
       </div>
     </div>
   </div>
+
+  <router-view v-if="!isMicroApp" />
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { start } from 'qiankun';
 import LayoutHeader from './private/layout-header.vue';
 import LayoutSider from './private/layout-sider.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const isMicroApp = computed(() => /^\/microApp/.test(route.path));
+
+onMounted(() => {
+  start({ prefetch: true });
+});
 </script>
 
 <style lang="scss">
@@ -43,8 +56,8 @@ import LayoutSider from './private/layout-sider.vue';
     overflow: auto;
   }
 
-  // #micro-target {
-  //   height: 100%;
-  // }
+  #micro-target {
+    height: 100%;
+  }
 }
 </style>

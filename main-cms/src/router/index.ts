@@ -8,6 +8,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {
+        path: 'login',
+        component: () => import('@/views/login/index.vue'),
+      },
+      {
         path: 'microApp/:pathMatch(.*)*',
         component: () => import('@/layout/child-view.vue'),
       },

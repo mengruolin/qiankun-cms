@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
 import Layout from '@/layout/index.vue';
+import { isLogin } from '@/utils';
+import { useUserStore } from '@/store';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -22,6 +24,30 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach(async (to, form, next) => {
+  const userStore = useUserStore();
+
+  if (to.path === '/login' && isLogin) {
+    next('/');
+  } else if (!isLogin) {
+    next(`/login?redirection=${to.path}`);
+  } else {
+    if (!userStore.menuList.length) {
+      await userStore.getUserMenu();
+    }
+
+    if (to.path === '/') {
+      next(userStore.headerMenuList[0].path);
+    } else if (/^\/microApp/.test(to.path)) {
+      console.log('route');
+
+      userStore.changeRoute(to.path);
+    }
+
+    next();
+  }
 });
 
 export default router;

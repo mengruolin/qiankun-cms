@@ -19,3 +19,9 @@ export const api_getUserMenu = () =>
     url: `${prefix}/api/user/getUserMenu`,
     method: 'GET',
   });
+
+export const api_getUserInfo = () =>
+  ajax({
+    url: `${prefix}/api/user/getUserInfo`,
+    method: 'GET',
+  });

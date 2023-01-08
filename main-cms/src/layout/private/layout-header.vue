@@ -55,13 +55,12 @@
     </div>
     <a-menu
       mode="horizontal"
-      :default-selected-keys="['1']"
+      :selected-keys="[userStore.headerMenuKey]"
       class="layout-header__menu"
     >
-      <a-menu-item key="1">Home</a-menu-item>
-      <a-menu-item key="2">Solution</a-menu-item>
-      <a-menu-item key="3">Cloud Service</a-menu-item>
-      <a-menu-item key="4">Cooperation</a-menu-item>
+      <a-menu-item v-for="menu of userStore.headerMenuList" :key="menu.path">{{
+        menu.name
+      }}</a-menu-item>
     </a-menu>
     <div class="layout-header__action">
       <a-button
@@ -79,10 +78,11 @@
 
 <script setup lang="ts">
 import { IconSunFill, IconMoonFill } from '@arco-design/web-vue/es/icon';
-import { useMainStore } from '@/store';
+import { useMainStore, useUserStore } from '@/store';
 import { toRefs } from 'vue';
 
 const mainStore = useMainStore();
+const userStore = useUserStore();
 
 const { theme } = toRefs(mainStore);
 const onChangTheme = () => {

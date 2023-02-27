@@ -29,24 +29,28 @@ const router = createRouter({
 router.beforeEach(async (to, form, next) => {
   const userStore = useUserStore();
 
-  if (to.path === '/login' && isLogin) {
-    next('/');
-  } else if (!isLogin) {
-    next(`/login?redirection=${to.path}`);
+  if (to.path === '/login') {
+    if (isLogin()) {
+      next('/');
+    } else {
+      next();
+    }
   } else {
-    if (!userStore.menuList.length) {
-      await userStore.getUserMenu();
+    if (isLogin()) {
+      if (!userStore.menuList.length) {
+        await userStore.getUserMenu();
+      }
+
+      if (to.path === '/') {
+        next(userStore.headerMenuList[0].path);
+      } else if (/^\/microApp/.test(to.path)) {
+        userStore.changeRoute(to.path);
+      }
+
+      next();
+    } else {
+      next(`/login?redirection=${to.path}`);
     }
-
-    if (to.path === '/') {
-      next(userStore.headerMenuList[0].path);
-    } else if (/^\/microApp/.test(to.path)) {
-      console.log('route');
-
-      userStore.changeRoute(to.path);
-    }
-
-    next();
   }
 });
 

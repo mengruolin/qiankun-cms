@@ -1,14 +1,24 @@
 <template>
-  <a-config-provider :locale="config.locale">
+  <a-config-provider :locale="locale">
     <router-view></router-view>
   </a-config-provider>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed } from 'vue';
 import enUS from '@arco-design/web-vue/es/locale/lang/en-us';
+import zhCN from '@arco-design/web-vue/es/locale/lang/zh-cn';
+import useLocale from '@/hooks/locale';
 
-const config = reactive({
-  locale: enUS,
+const { currentLocale } = useLocale();
+const locale = computed(() => {
+  switch (currentLocale.value) {
+    case 'zh-CN':
+      return zhCN;
+    case 'en-US':
+      return enUS;
+    default:
+      return enUS;
+  }
 });
 </script>

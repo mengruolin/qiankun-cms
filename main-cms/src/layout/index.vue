@@ -6,7 +6,6 @@
       <layout-sider />
       <div class="main-layout__main">
         <div id="micro-target"></div>
-        <a-layout-footer>footer</a-layout-footer>
       </div>
     </div>
   </div>

@@ -32,6 +32,11 @@ const qiankunState = reactive({
 export const qiankunActions: MicroAppStateActions =
   initGlobalState(qiankunState);
 
+export const setGlobalState = (callback: any) => {
+  typeof callback === 'function' && callback(qiankunState);
+  qiankunActions.setGlobalState(qiankunState);
+};
+
 export const qiankunRegister = () => {
   registerMicroApps(routes, {
     beforeLoad: (app: any) => {

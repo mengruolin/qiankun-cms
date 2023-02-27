@@ -63,30 +63,78 @@
       }}</a-menu-item>
     </a-menu>
     <div class="layout-header__action">
-      <a-button
-        type="outline"
-        shape="circle"
-        class="layout-header__action__btn"
-        @click="onChangTheme"
-      >
-        <icon-sun-fill v-if="theme === 'dark'" />
-        <icon-moon-fill v-else />
-      </a-button>
+      <div class="layout-header__action__li">
+        <a-button
+          type="outline"
+          shape="circle"
+          class="layout-header__action__btn"
+          @click="setDropDownVisible"
+        >
+          <icon-language />
+        </a-button>
+        <a-dropdown trigger="click" @select="changeLocale as any">
+          <div ref="triggerBtn" class="trigger-btn"></div>
+          <template #content>
+            <a-doption
+              v-for="item in locales"
+              :key="item.value"
+              :value="item.value"
+            >
+              <span :class="currentLocale === item.value && 'is-actived'">{{
+                item.label
+              }}</span>
+            </a-doption>
+          </template>
+        </a-dropdown>
+      </div>
+
+      <div class="layout-header__action__li">
+        <a-button
+          type="outline"
+          shape="circle"
+          class="layout-header__action__btn"
+          @click="onChangTheme"
+        >
+          <icon-sun-fill v-if="theme === 'dark'" />
+          <icon-moon-fill v-else />
+        </a-button>
+      </div>
     </div>
   </a-layout-header>
 </template>
 
 <script setup lang="ts">
-import { IconSunFill, IconMoonFill } from '@arco-design/web-vue/es/icon';
+import {
+  IconSunFill,
+  IconMoonFill,
+  IconLanguage,
+} from '@arco-design/web-vue/es/icon';
 import { useMainStore, useUserStore } from '@/store';
-import { toRefs } from 'vue';
+import { ref, toRefs } from 'vue';
+import { LOCALE_OPTIONS } from '@/locale';
+import useLocale from '@/hooks/locale';
+
+const { changeLocale, currentLocale } = useLocale();
+const locales = [...LOCALE_OPTIONS];
 
 const mainStore = useMainStore();
 const userStore = useUserStore();
 
 const { theme } = toRefs(mainStore);
+
+const triggerBtn = ref();
+
 const onChangTheme = () => {
   mainStore.setTheme(theme.value === 'dark' ? 'light' : 'dark');
+};
+
+const setDropDownVisible = () => {
+  const event = new MouseEvent('click', {
+    view: window,
+    bubbles: true,
+    cancelable: true,
+  });
+  triggerBtn.value.dispatchEvent(event);
 };
 </script>
 
@@ -121,10 +169,14 @@ const onChangTheme = () => {
     align-items: center;
     justify-items: flex-end;
 
+    &__li + &__li {
+      margin-left: 20px;
+    }
+
     &__btn {
       border-color: rgb(var(--gray-2)) !important;
       color: rgb(var(--gray-8)) !important;
-      background-color: var(--color-bg-2) !important;
+      font-size: 16px;
     }
   }
 }
